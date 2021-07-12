@@ -1,0 +1,83 @@
+#필요한 라이브러리 호출
+import tensorflow as tf
+from tensorflow import keras
+import numpy as np
+import matplotlib.pyplot as plt
+import cv2
+from tensorflow.keras.models import Model
+from sklearn.model_selection import train_test_split
+from tensorflow.keras.utils import to_categorical
+
+
+#특성 맵 정의
+
+ins= model.inputs 
+outs= model.layers[0].output  
+feature_map= Model(inputs= ins, outputs= outs)  
+feature_map.summary()
+
+
+#이미지 호출
+from google.colab import files # 데이터 불러오기
+file_uploaded=files.upload()
+
+img=cv2.imread("cat.jpg")   
+plt.imshow(img)
+
+
+#이미지 전처리 및 특성 맵 확인
+img=cv2.resize(img,(100,100))               #이미지 크기 조정
+input_img= np.expand_dims(img, axis=0)      #이미지 차원 조정
+print(input_img.shape)                      #입력 이미지 형태 출력
+feature=feature_map.predict(input_img)       #이미지를 모델에 적용
+print(feature.shape)                            #특성 맵에 대한 형태 출력
+fig= plt.figure(figsize=(50,50))
+for i in range(16):#이미지 16개 출력
+    ax=fig.add_subplot(8,4,i+1)#subplot(m,n,p)는 mxn 그리드로 나누고, p로 지정된 위치에 좌표축을 만듦
+    ax.imshow(feature[0,:,:,i])
+
+
+#이미지를 모델에 적용(2번째 계층에 대한 특성 맵)
+ins= model.inputs 
+outs= model.layers[2].output  
+feature_map= Model(inputs= ins, outputs= outs)  
+img=cv2.imread("cat.jpg")                   
+img=cv2.resize(img,(100,100))               
+input_img= np.expand_dims(img, axis=0)   
+
+feature=feature_map.predict(input_img)        
+fig= plt.figure(figsize=(50,50))
+for i in range(48):
+    ax=fig.add_subplot(8,8,i+1)
+    ax.imshow(feature[0,:,:,i])
+    
+    
+  
+#이미지를 모델에 적용(6번째 계층에 대한 특성 맵)
+
+ins= model.inputs 
+outs= model.layers[6].output  
+feature_map= Model(inputs= ins, outputs= outs)  
+img=cv2.imread("cat.jpg")                   
+img=cv2.resize(img,(100,100))               
+input_img= np.expand_dims(img, axis=0)      
+                      
+feature=feature_map.predict(input_img)        
+fig= plt.figure(figsize=(50,50))
+for i in range(48):
+    ax=fig.add_subplot(8,8,i+1)
+    ax.imshow(feature[0,:,:,i])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
